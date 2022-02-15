@@ -73,7 +73,7 @@ all: $(NAME)
 
 clean:
 	-rm -f $(OBJSB)
-	-rm libft.h.gch 
+	-rm *.gch 
 
 fclean: clean
 	rm -f $(NAME)
