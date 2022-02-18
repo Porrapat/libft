@@ -58,22 +58,21 @@ SRCSB = ft_lstnew.c			\
 NAME = libft.a
 
 OBJS = $(SRCS:.c=.o)
-
-OBJSB = $(OBJS) $(SRCSB:.c=.o)
+OBJSB = $(SRCSB:.c=.o)
 
 CC = gcc
 
 CC_FLAGS = -c -Wall -Wextra -Werror
 
 $(NAME): $(OBJS)
-	$(CC) $(SRCS) libft.h $(CC_FLAGS)
+	$(CC) $(SRCS) $(CC_FLAGS)
 	ar rcs $(NAME) $(OBJS)
 
 all: $(NAME)
 
 clean:
+	-rm -f $(OBJS)
 	-rm -f $(OBJSB)
-	-rm -f *.gch 
 
 fclean: clean
 	rm -f $(NAME)
@@ -81,5 +80,7 @@ fclean: clean
 re: fclean all
 
 bonus: $(OBJSB)
-	$(CC) $(SRCS) $(SRCSB) $(CC_FLAGS)
+	$(CC) $(SRCSB) $(CC_FLAGS)
 	ar rcs $(NAME) $(OBJSB)
+
+.PHONY: all clean fclean re bonus
