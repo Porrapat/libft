@@ -73,7 +73,7 @@ all: $(NAME)
 
 clean:
 	-rm -f $(OBJSB)
-	-rm *.gch 
+	-rm -f *.gch 
 
 fclean: clean
 	rm -f $(NAME)
@@ -83,4 +83,3 @@ re: fclean all
 bonus: $(OBJSB)
 	$(CC) $(SRCS) $(SRCSB) $(CC_FLAGS)
 	ar rcs $(NAME) $(OBJSB)
-
