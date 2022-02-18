@@ -19,6 +19,7 @@ void	*ft_memchr(const void *s, int c, size_t n)
 
 	str = (const char *)s;
 	i = 0;
+	c %= 256;
 	while (i < n)
 	{
 		if (str[i] == c)
