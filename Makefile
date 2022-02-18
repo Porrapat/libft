@@ -64,8 +64,10 @@ CC = gcc
 
 CC_FLAGS = -c -Wall -Wextra -Werror
 
+%.o: %.c
+	${CC} ${CC_FLAGS} -c $< -o $@
+
 $(NAME): $(OBJS)
-	$(CC) $(SRCS) $(CC_FLAGS)
 	ar rcs $(NAME) $(OBJS)
 
 all: $(NAME)
@@ -80,7 +82,6 @@ fclean: clean
 re: fclean all
 
 bonus: $(OBJSB)
-	$(CC) $(SRCSB) $(CC_FLAGS)
 	ar rcs $(NAME) $(OBJSB)
 
 .PHONY: all clean fclean re bonus
