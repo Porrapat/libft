@@ -34,7 +34,7 @@ char	*ft_strnstr(const char *haystack, const char *needle, size_t len)
 			nh -= nn;
 			nn = 0;
 		}
-		if (nh >= len && haystack[nh] != '\0')
+		if (haystack[nh] == '\0' || (nh >= len && haystack[nh] != '\0'))
 			return (NULL);
 		nh++;
 	}
