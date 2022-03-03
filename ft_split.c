@@ -12,22 +12,21 @@
 
 #include "libft.h"
 
-int	count(char const *s, char c)
+static int	count(const char *str, char sep)
 {
-	int	i;
-	int	n;
+	int	words;
 
-	n = 0;
-	i = 0;
-	while (s[i])
+	words = 0;
+	while (*str)
 	{
-		if (s[i] == c && s[i - 1] != c)
-			n++;
-		i++;
+		while (*str && *str == sep)
+			str++;
+		if (*str && *str != sep)
+			words++;
+		while (*str && *str != sep)
+			str++;
 	}
-	if (!s[i] && s[i - 1] != c)
-		n++;
-	return (n);
+	return (words);
 }
 
 int	endstr(char const *s, char c, int start)
@@ -46,7 +45,7 @@ char	*copy(char const *s, int start, int end)
 	int		i;
 
 	i = 0;
-	cpy = malloc(sizeof(char) * (end - start));
+	cpy = (char *)malloc(sizeof(char) * (end - start + 1));
 	if (!cpy)
 		return (0);
 	while (start < end)
@@ -74,10 +73,8 @@ char	**ft_split(char const *s, char c)
 	i = 0;
 	while (j < num)
 	{
-		while (s[i] == c)
+		while (s[i] == c && s[i] != '\0')
 			i++;
-		if (s[i] == '\0')
-			break ;
 		split[j] = copy(s, i, endstr(s, c, i));
 		j++;
 		i = endstr(s, c, i);
