@@ -12,72 +12,76 @@
 
 #include "libft.h"
 
-static int	ft_custom_strlen(const char *str, char sep)
+int	count(char const *s, char c)
 {
 	int	i;
+	int	n;
 
+	n = 0;
 	i = 0;
-	while (str[i] && str[i] != sep)
-		i++;
-	return (i);
-}
-
-static int	ft_count_words(const char *str, char sep)
-{
-	int	words;
-
-	words = 0;
-	while (*str)
+	while (s[i])
 	{
-		while (*str && *str == sep)
-			str++;
-		if (*str && *str != sep)
-			words++;
-		while (*str && *str != sep)
-			str++;
+		if (s[i] == c && s[i - 1] != c)
+			n++;
+		i++;
 	}
-	return (words);
+	if (!s[i] && s[i - 1] != c)
+		n++;
+	return (n);
 }
 
-static char	*ft_custom_strdup(const char *src, int len, char sep)
+int	endstr(char const *s, char c, int start)
 {
-	char	*dup;
+	int	end;
+
+	end = start;
+	while (s[end] && s[end] != c)
+		end++;
+	return (end);
+}
+
+char	*copy(char const *s, int start, int end)
+{
+	char	*cpy;
 	int		i;
 
-	dup = (char *)malloc(sizeof(char) * (len + 1));
-	if (!dup)
-		return (NULL);
 	i = 0;
-	while (*src && *src != sep)
-		dup[i++] = *src++;
-	dup[i] = '\0';
-	return (dup);
+	cpy = malloc(sizeof(char) * (end - start));
+	if (!cpy)
+		return (0);
+	while (start < end)
+	{
+		cpy[i] = s[start];
+		i++;
+		start++;
+	}
+	cpy[i] = '\0';
+	return (cpy);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**tab;
-	int		words;
-	int		len;
+	char	**split;
+	int		num;
+	int		j;
 	int		i;
 
-	if (!s)
-		return (NULL);
-	words = ft_count_words(s, c);
-	tab = (char **)malloc(sizeof(char *) * (words + 1));
-	if (!tab)
-		return (NULL);
+	num = count(s, c);
+	split = (char **)malloc(sizeof(char *) * (num + 1));
+	if (!split)
+		return (0);
+	j = 0;
 	i = 0;
-	while (i < words)
+	while (j < num)
 	{
-		while (*s && *s == c)
-			s++;
-		len = ft_custom_strlen(s, c);
-		tab[i] = ft_custom_strdup(s, len, c);
-		while (*s && *s != c)
-			s++;
-		i++;
+		while (s[i] == c)
+			i++;
+		if (s[i] == '\0')
+			break ;
+		split[j] = copy(s, i, endstr(s, c, i));
+		j++;
+		i = endstr(s, c, i);
 	}
-	tab[i] = 0;
-	return (tab);
+	split[j] = 0;
+	return (split);
 }
