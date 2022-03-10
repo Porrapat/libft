@@ -12,41 +12,31 @@
 
 #include "libft.h"
 
-static char	*ft_mystronebyte(void)
-{
-	char	*str;
-
-	str = (char *) malloc(sizeof(char));
-	if (!str)
-		return (NULL);
-	str[0] = '\0';
-	return (str);
-}
-
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*str;
-	size_t	i;
+	char	*result;
+	size_t	result_size;
 	size_t	s_len;
 
-	s_len = ft_strlen(s);
-	if (start >= s_len)
+	if (!s)
 	{
-		str = ft_mystronebyte();
-		return (str);
-	}
-	if (s_len <= len)
-		str = (char *) malloc(sizeof(char) * (s_len - start + 1));
-	else
-		str = (char *) malloc(sizeof(char) * (len + 1));
-	if (str == NULL)
 		return (NULL);
-	i = 0;
-	while (i < len && s[i + start] != '\0')
-	{
-		str[i] = s[i + start];
-		i++;
 	}
-	str[i] = '\0';
-	return (str);
+	s_len = ft_strlen(s);
+	result_size = 0;
+	if (start < s_len)
+	{
+		result_size = s_len - start;
+	}
+	if (result_size > len)
+	{
+		result_size = len;
+	}
+	result = (char *)malloc(result_size + 1);
+	if (!result)
+	{
+		return (NULL);
+	}
+	ft_strlcpy(result, s + start, result_size + 1);
+	return (result);
 }
