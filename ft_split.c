@@ -21,7 +21,7 @@ static	int	ft_cstsplit(char const *s, char c)
 	len = 0;
 	while (s[i])
 	{
-		if (s[i] == c && s[i - 1] != c && i != 0)
+		if (s[i] == c && i != 0 && s[i - 1] != c)
 			len++;
 		if (s[i] != c && s[i + 1] == 0)
 			len++;
@@ -58,7 +58,7 @@ static	char	**ft_spliter(char const *s, char c)
 	{
 		if (s[i] != c && s[i + 1] == 0)
 			ptr[index++] = ft_substr(s, len, i - len + 1);
-		if (s[i] == c && s[i - 1] != c && i != 0)
+		if (s[i] == c && i != 0 && s[i - 1] != c)
 			ptr[index++] = ft_substr(s, len, i - len);
 		if (index > 0 && ptr[index - 1] == 0)
 			return (ft_free(ptr));
