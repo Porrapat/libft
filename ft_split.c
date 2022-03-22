@@ -12,72 +12,78 @@
 
 #include "libft.h"
 
-static int	ft_custom_strlen(const char *str, char sep)
+static	int	ft_cstsplit(char const *s, char c)
 {
 	int	i;
+	int	len;
 
 	i = 0;
-	while (str[i] && str[i] != sep)
-		i++;
-	return (i);
-}
-
-static int	ft_count_words(const char *str, char sep)
-{
-	int	words;
-
-	words = 0;
-	while (*str)
+	len = 0;
+	while (s[i])
 	{
-		while (*str && *str == sep)
-			str++;
-		if (*str && *str != sep)
-			words++;
-		while (*str && *str != sep)
-			str++;
+		if (s[i] == c && s[i - 1] != c && i != 0)
+			len++;
+		if (s[i] != c && s[i + 1] == 0)
+			len++;
+		i++;
 	}
-	return (words);
+	return (len);
 }
 
-static char	*ft_custom_strdup(const char *src, int len, char sep)
+static	char	**ft_free(char **str)
 {
-	char	*dup;
 	int		i;
 
-	dup = (char *)malloc(sizeof(char) * (len + 1));
-	if (!dup)
-		return (NULL);
 	i = 0;
-	while (*src && *src != sep)
-		dup[i++] = *src++;
-	dup[i] = '\0';
-	return (dup);
+	while (str[i])
+		free(str[i++]);
+	free(str);
+	return (0);
+}
+
+static	char	**ft_spliter(char const *s, char c)
+{
+	int		i;
+	int		len;
+	int		index;
+	char	**ptr;
+
+	i = 0;
+	len = 0;
+	index = 0;
+	ptr = malloc(sizeof(char *) * (ft_cstsplit(s, c) + 1));
+	if (!ptr)
+		return (0);
+	while (s[i])
+	{
+		if (s[i] != c && s[i + 1] == 0)
+			ptr[index++] = ft_substr(s, len, i - len + 1);
+		if (s[i] == c && s[i - 1] != c && i != 0)
+			ptr[index++] = ft_substr(s, len, i - len);
+		if (index > 0 && ptr[index - 1] == 0)
+			return (ft_free(ptr));
+		if (s[i] == c)
+			len = i + 1;
+		i++;
+	}
+	ptr[index] = 0;
+	return (ptr);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**tab;
-	int		words;
-	int		len;
-	int		i;
+	char	**ptr;
 
 	if (!s)
-		return (NULL);
-	words = ft_count_words(s, c);
-	tab = (char **)malloc(sizeof(char *) * (words + 1));
-	if (!tab)
-		return (NULL);
-	i = 0;
-	while (i < words)
 	{
-		while (*s && *s == c)
-			s++;
-		len = ft_custom_strlen(s, c);
-		tab[i] = ft_custom_strdup(s, len, c);
-		while (*s && *s != c)
-			s++;
-		i++;
+		ptr = malloc(sizeof(char *));
+		if (!ptr)
+			return (0);
+		*ptr = 0;
+		return (ptr);
 	}
-	tab[i] = 0;
-	return (tab);
+	ptr = ft_spliter(s, c);
+	if (!ptr)
+		return (0);
+	return (ptr);
 }
