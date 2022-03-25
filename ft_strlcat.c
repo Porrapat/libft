@@ -12,6 +12,12 @@
 
 #include "libft.h"
 
+// dest = "abc"
+// src = "def"
+// ft_strlcat(dest, src, 7);
+// return 7
+// dest = "abcdef"
+
 size_t	ft_strlcat(char *dst, const char *src, size_t dstsize)
 {
 	size_t	i;
