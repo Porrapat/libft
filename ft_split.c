@@ -12,78 +12,72 @@
 
 #include "libft.h"
 
-static	int	ft_cstsplit(char const *s, char c)
+static int	ft_custom_strlen(const char *str, char sep)
 {
 	int	i;
-	int	len;
 
 	i = 0;
-	len = 0;
-	while (s[i])
-	{
-		if (s[i] == c && i != 0 && s[i - 1] != c)
-			len++;
-		if (s[i] != c && s[i + 1] == 0)
-			len++;
+	while (str[i] && str[i] != sep)
 		i++;
-	}
-	return (len);
+	return (i);
 }
 
-static	char	**ft_free(char **str)
+static int	ft_count_words(const char *str, char sep)
 {
-	int		i;
+	int	words;
 
-	i = 0;
-	while (str[i])
-		free(str[i++]);
-	free(str);
-	return (0);
+	words = 0;
+	while (*str)
+	{
+		while (*str && *str == sep)
+			str++;
+		if (*str && *str != sep)
+			words++;
+		while (*str && *str != sep)
+			str++;
+	}
+	return (words);
 }
 
-static	char	**ft_spliter(char const *s, char c)
+static char	*ft_custom_strdup(const char *src, int len, char sep)
 {
+	char	*dup;
 	int		i;
-	int		len;
-	int		index;
-	char	**ptr;
 
+	dup = (char *)malloc(sizeof(char) * (len + 1));
+	if (!dup)
+		return (NULL);
 	i = 0;
-	len = 0;
-	index = 0;
-	ptr = malloc(sizeof(char *) * (ft_cstsplit(s, c) + 1));
-	if (!ptr)
-		return (0);
-	while (s[i])
-	{
-		if (s[i] != c && s[i + 1] == 0)
-			ptr[index++] = ft_substr(s, len, i - len + 1);
-		if (s[i] == c && i != 0 && s[i - 1] != c)
-			ptr[index++] = ft_substr(s, len, i - len);
-		if (index > 0 && ptr[index - 1] == 0)
-			return (ft_free(ptr));
-		if (s[i] == c)
-			len = i + 1;
-		i++;
-	}
-	ptr[index] = 0;
-	return (ptr);
+	while (*src && *src != sep)
+		dup[i++] = *src++;
+	dup[i] = '\0';
+	return (dup);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**ptr;
+	char	**tab;
+	int		words;
+	int		len;
+	int		i;
 
 	if (!s)
+		return (NULL);
+	words = ft_count_words(s, c);
+	tab = (char **)malloc(sizeof(char *) * (words + 1));
+	if (!tab)
+		return (NULL);
+	i = 0;
+	while (i < words)
 	{
-		ptr = malloc(sizeof(char *));
-		if (!ptr)
-			return (0);
-		*ptr = 0;
-		return (ptr);
+		while (*s && *s == c)
+			s++;
+		len = ft_custom_strlen(s, c);
+		tab[i] = ft_custom_strdup(s, len, c);
+		while (*s && *s != c)
+			s++;
+		i++;
 	}
-	ptr = ft_spliter(s, c);
-	if (!ptr)
-		return (0);
-	return (ptr);
+	tab[i] = 0;
+	return (tab);
 }
